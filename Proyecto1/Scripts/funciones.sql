@@ -94,10 +94,9 @@ RETURN
     INNER JOIN 
         proyecto1.ProfileStudent ps ON u.Id = ps.UserId
     INNER JOIN 
-        proyecto1.Roles r ON u.Id = r.Id
+        proyecto1.UsuarioRole ur ON u.Id = ur.UserId
+    INNER JOIN 
+        proyecto1.Roles r ON ur.RoleId = r.Id
     WHERE 
-        u.Id = @UserId
+        u.Id = @UserId AND ur.IsLatestVersion = 1
 );
-
--- Supongamos que tenemos un usuario con Id = '87654321-0FED-CBA9-8765-43210FEDCBA9'
-SELECT * FROM proyecto1.F5('51BFDE5F-A658-4A52-9955-4BE65C20B6A4');
