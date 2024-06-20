@@ -1,5 +1,6 @@
 -- PRIMERA FUNCION
-CREATE FUNCTION proyecto1.Func_course_usuarios (@CodCourse INT)
+-- Func_course_usuarios
+CREATE FUNCTION proyecto1.F1 (@CodCourse INT)
 RETURNS TABLE
 AS
 RETURN
@@ -22,7 +23,8 @@ RETURN
 );
 
 -- SEGUNDA FUNCION
-CREATE FUNCTION proyecto1.Func_tutor_course (@TutorId UNIQUEIDENTIFIER)
+-- Func_tutor_course
+CREATE FUNCTION proyecto1.F2 (@TutorId UNIQUEIDENTIFIER)
 RETURNS TABLE
 AS
 RETURN
@@ -40,7 +42,8 @@ RETURN
 );
 
 -- TERCERA FUNCION
-CREATE FUNCTION proyecto1.Func_notification_usuarios (@UserId UNIQUEIDENTIFIER)
+-- Func_notification_usuarios
+CREATE FUNCTION proyecto1.F3 (@UserId UNIQUEIDENTIFIER)
 RETURNS TABLE
 AS
 RETURN
@@ -56,7 +59,8 @@ RETURN
 );
 
 -- CUARTA FUNCION
-CREATE FUNCTION proyecto1.Func_logger ()
+-- Func_logger
+CREATE FUNCTION proyecto1.F4 ()
 RETURNS TABLE
 AS
 RETURN
@@ -70,7 +74,8 @@ RETURN
 );
 
 -- QUINTA FUNCION
-CREATE FUNCTION proyecto1.Func_usuarios (@UserId UNIQUEIDENTIFIER)
+-- Func_usuarios
+CREATE FUNCTION proyecto1.F5 (@UserId UNIQUEIDENTIFIER)
 RETURNS TABLE
 AS
 RETURN
