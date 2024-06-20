@@ -25,7 +25,7 @@ BEGIN
     -- Validacion de Curso
     ELSE IF @EntityName = 'Course'
     BEGIN
-        IF ISNULL(@Name, '') NOT LIKE '%[^a-zA-Z ]%' AND ISNUMERIC(@CreditsRequired) = 1
+        IF ISNULL(@Name, '') NOT LIKE '%[^a-zA-Z1-9 ]%' AND @Name NOT LIKE '%[1-9]%[^1-9 ]'  AND ISNUMERIC(@CreditsRequired) = 1
             SET @IsValid = 1;
         ELSE
             SET @IsValid = 0;
@@ -455,53 +455,50 @@ END;
 
 CREATE PROCEDURE proyecto1.PR5 
     @CodCourse INT,
-    @Name NVARCHAR(max),
+    @Name NVARCHAR(MAX),
     @CreditsRequired INT
 AS 
 BEGIN
-    DECLARE @Description NVARCHAR(max);
+    DECLARE @Description NVARCHAR(MAX);
     DECLARE @IsValid BIT;
+    DECLARE @ErrorMessage NVARCHAR(MAX);
 
-    -- Validar los datos utilizando el procedimiento PR6
-    EXEC proyecto1.PR6 'Course', NULL, NULL, @Name, @CreditsRequired, @IsValid OUTPUT;
-    
-    IF @IsValid = 0
-		BEGIN
-			-- MARCAR ERROR
-			SET @Description = 'Inserción de Curso Fallida Nombre o Créditos Incorrectos';
-			INSERT INTO proyecto1.HistoryLog ([Date], Description)
-			VALUES (GETDATE(), @Description);
-			SELECT @Description AS 'Error';
-			ROLLBACK TRANSACTION;
-			RETURN;
-		END
-
-    IF @CreditsRequired < 0
-		BEGIN
-			-- MARCAR ERROR
-			SET @Description = 'Inserción de Curso Fallida Créditos no pueden ser negativos';
-			-- PRINT @Description;
-			INSERT INTO proyecto1.HistoryLog ([Date], Description)
-			VALUES (GETDATE(), @Description);
-			SELECT @Description AS 'Error';
-			ROLLBACK TRANSACTION;
-			RETURN;
-		END
-
-    IF @CodCourse < 0
-		BEGIN
-			-- MARCAR ERROR
-			SET @Description = 'Inserción de Curso Fallida Código de Curso no puede ser negativo';
-			INSERT INTO proyecto1.HistoryLog ([Date], Description)
-			VALUES (GETDATE(), @Description);
-			SELECT @Description AS 'Error';
-			ROLLBACK TRANSACTION;
-			RETURN;
-		END
+    -- Iniciar la transacción
+    BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Inicio de la transacción
-        BEGIN TRANSACTION;
+        -- Validar los datos utilizando el procedimiento PR6
+        EXEC proyecto1.PR6 'Course', NULL, NULL, @Name, @CreditsRequired, @IsValid OUTPUT;
+        
+        IF @IsValid = 0
+        BEGIN
+            SET @Description = 'Inserción de Curso Fallida: Nombre o Créditos Incorrectos';
+            INSERT INTO proyecto1.HistoryLog ([Date], Description)
+            VALUES (GETDATE(), @Description);
+            SELECT @Description AS 'Error';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        IF @CreditsRequired < 0
+        BEGIN
+            SET @Description = 'Inserción de Curso Fallida: Créditos no pueden ser negativos';
+            INSERT INTO proyecto1.HistoryLog ([Date], Description)
+            VALUES (GETDATE(), @Description);
+            SELECT @Description AS 'Error';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        IF @CodCourse < 0
+        BEGIN
+            SET @Description = 'Inserción de Curso Fallida: Código de Curso no puede ser negativo';
+            INSERT INTO proyecto1.HistoryLog ([Date], Description)
+            VALUES (GETDATE(), @Description);
+            SELECT @Description AS 'Error';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
 
         -- Insertar el curso en la tabla Course
         INSERT INTO proyecto1.Course (CodCourse, Name, CreditsRequired)
@@ -512,81 +509,16 @@ BEGIN
         SELECT 'Inserción de Curso exitosa' AS Mensaje;
     END TRY
     BEGIN CATCH
-        -- Error - cancelar la transacción en caso de error
-        SET @Description = 'Inserción de Curso Fallida.';
-        INSERT INTO proyecto1.HistoryLog ([Date], Description) VALUES (GETDATE(), @Description);
+        -- Manejo de error - cancelar la transacción en caso de error
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END
+        
+        SET @ErrorMessage = ERROR_MESSAGE();
+        SET @Description = 'Inserción de Curso Fallida: ' + @ErrorMessage;
+        INSERT INTO proyecto1.HistoryLog ([Date], Description)
+        VALUES (GETDATE(), @Description);
         SELECT @Description AS 'Error';
-        ROLLBACK TRANSACTION;
     END CATCH;
 END;
-
--- Definir variables
-DECLARE @procedureName NVARCHAR(MAX);
-DECLARE @sqlCommand NVARCHAR(MAX);
-
--- Inicializar cursor para obtener nombres de procedimientos almacenados
-DECLARE procedureCursor CURSOR FOR
-SELECT QUOTENAME(SCHEMA_NAME(schema_id)) + '.' + QUOTENAME(name) AS procedureName
-FROM sys.procedures
-WHERE type_desc = 'SQL_STORED_PROCEDURE';
-
--- Abrir cursor
-OPEN procedureCursor;
-
--- Recorrer y eliminar cada procedimiento almacenado
-FETCH NEXT FROM procedureCursor INTO @procedureName;
-WHILE @@FETCH_STATUS = 0
-BEGIN
-    -- Construir el comando DROP PROCEDURE
-    SET @sqlCommand = 'DROP PROCEDURE ' + @procedureName;
-
-    -- Ejecutar el comando
-    EXEC sp_executesql @sqlCommand;
-
-    -- Obtener siguiente procedimiento
-    FETCH NEXT FROM procedureCursor INTO @procedureName;
-END
-
--- Cerrar y liberar cursor
-CLOSE procedureCursor;
-DEALLOCATE procedureCursor;
-
-
-
-SELECT 
-    p.name AS ProcedureName,
-    p.create_date AS DateCreated,
-    p.modify_date AS DateModified
-FROM 
-    sys.procedures p
-ORDER BY 
-    p.name;
-
-
-DROP PROCEDURE proyecto1.PR5;
-select * from proyecto1.Usuarios;
-INSERT INTO proyecto1.Usuarios (Id, Firstname, Lastname, Email, DateOfBirth, Password, LastChanges, EmailConfirmed)
-VALUES
-(NEWID(), 'John', 'Doe', 'johndoe@example.com', '1990-01-01', 'password123', GETDATE(), 1);
-select * from proyecto1.CourseAssignment;
-select * from proyecto1.Notification;
-select * from proyecto1.HistoryLog;
-Select * from proyecto1.Usuarios;
-select * from proyecto1.TutorProfile;
-select * from proyecto1.CourseTutor;
-select * from proyecto1.Roles;
-select * from proyecto1.Course;
-EXEC proyecto1.PR3 'johndoe@example.com', 283;
-
-EXEC proyecto1.PR1 
-    @Firstname = 'John Franchesco',
-    @Lastname = 'Doe Marino',
-    @Email = 'johnF.doe@example.com',
-    @DateOfBirth = '1990-01-01',
-    @Password = 'password123',
-    @Credits = 10;
-
-EXEC proyecto1.PR2 'johndoe@example.com', 283;
-EXEC proyecto1.PR4 'Tutor';
-EXEC proyecto1.PR5 281, 'Sistemas Operativos', -45;
-
