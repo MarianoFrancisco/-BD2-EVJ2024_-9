@@ -59,7 +59,7 @@ BEGIN
     -- Validaciones de cada campo
     IF (@Firstname IS NULL OR @Firstname = '')
     BEGIN 
-        SET @ErrorMessage = 'Error, El nombre no puede ir vacío';
+        SET @ErrorMessage = 'Error, El nombre no puede ir vacï¿½o';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
@@ -67,7 +67,7 @@ BEGIN
 
     IF (@Lastname IS NULL OR @Lastname = '')
     BEGIN 
-        SET @ErrorMessage = 'Error, El apellido no puede ir vacío';
+        SET @ErrorMessage = 'Error, El apellido no puede ir vacï¿½o';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
@@ -75,7 +75,7 @@ BEGIN
 
     IF (@Email IS NULL OR @Email = '')
     BEGIN 
-        SET @ErrorMessage = 'Error, El campo correo no puede ir vacío';
+        SET @ErrorMessage = 'Error, El campo correo no puede ir vacï¿½o';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
@@ -83,7 +83,7 @@ BEGIN
 
     IF (@DateOfBirth IS NULL)
     BEGIN
-        SET @ErrorMessage = 'Error, La fecha de nacimiento no puede ir vacía';
+        SET @ErrorMessage = 'Error, La fecha de nacimiento no puede ir vacï¿½a';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
@@ -91,7 +91,7 @@ BEGIN
 
     IF (@Password IS NULL OR @Password = '')
     BEGIN
-        SET @ErrorMessage = 'Error, El password no puede estar vacío';
+        SET @ErrorMessage = 'Error, El password no puede estar vacï¿½o';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
@@ -99,14 +99,14 @@ BEGIN
 
     IF (@Credits < 0)
     BEGIN
-        SET @ErrorMessage = 'Error, No puede ingresar una cantidad de créditos negativa';
+        SET @ErrorMessage = 'Error, No puede ingresar una cantidad de crï¿½ditos negativa';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
     END
 
     BEGIN TRY
-        -- Inicio de la transacción
+        -- Inicio de la transacciï¿½n
         BEGIN TRANSACTION;
 
 		-- Validaci?n de datos utilizando el procedimiento PR6
@@ -120,7 +120,7 @@ BEGIN
             RETURN;
         END  
 
-        -- Validar si el correo ya está asociado con otra cuenta
+        -- Validar si el correo ya estï¿½ asociado con otra cuenta
         IF EXISTS (SELECT * FROM proyecto1.Usuarios WHERE Email = @Email)
         BEGIN
             SET @ErrorMessage = 'Ya hay un usuario asociado con el correo indicado';
@@ -129,7 +129,7 @@ BEGIN
             RETURN;
         END
 
-        -- Creación de rol estudiante
+        -- Creaciï¿½n de rol estudiante
         SET @RolId = (SELECT Id FROM proyecto1.Roles WHERE RoleName = 'Student');
         IF @RolId IS NULL
         BEGIN
@@ -160,12 +160,12 @@ BEGIN
         INSERT INTO proyecto1.Notification (UserId, Message, Date)
         VALUES (@UserId, 'Se ha registrado satisfactoriamente', GETDATE());
 
-        -- Confirmar la transacción
+        -- Confirmar la transacciï¿½n
         COMMIT TRANSACTION;
         PRINT 'El estudiante ha sido registrado satisfactoriamente';
     END TRY
     BEGIN CATCH
-        -- Error - cancelar transacción 
+        -- Error - cancelar transacciï¿½n 
         ROLLBACK;
         SELECT @ErrorMessage = ERROR_MESSAGE();
         SET @Description = 'Registro de Estudiante Fallido.';
@@ -180,7 +180,6 @@ BEGIN
         PRINT 'El registro del estudiante no fue satisfactorio';
     END CATCH;
 END;
-
 
 -- ===
 -- PR2
@@ -197,10 +196,10 @@ BEGIN
     DECLARE @ErrorSeverity INT;
     DECLARE @Description NVARCHAR(MAX);
 
-    -- Validaciones de los parámetros de entrada
+    -- Validaciones de los parï¿½metros de entrada
     IF (@Email IS NULL OR @Email = '')
     BEGIN
-        SET @ErrorMessage = 'Error, El campo correo no puede ir vacío';
+        SET @ErrorMessage = 'Error, El campo correo no puede ir vacï¿½o';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
@@ -208,14 +207,14 @@ BEGIN
 
     IF (@CodCourse IS NULL OR @CodCourse <= 0)
     BEGIN
-        SET @ErrorMessage = 'Error, El código del curso debe ser un número positivo';
+        SET @ErrorMessage = 'Error, El cï¿½digo del curso debe ser un nï¿½mero positivo';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
     END
 
     BEGIN TRY
-        -- Inicio de la transacción
+        -- Inicio de la transacciï¿½n
         BEGIN TRANSACTION;
 
         -- Obtener UserId basado en el Email proporcionado
@@ -223,7 +222,7 @@ BEGIN
 
         IF @UserId IS NULL
         BEGIN
-            SET @ErrorMessage = 'No se encontró un usuario con el correo especificado.';
+            SET @ErrorMessage = 'No se encontrï¿½ un usuario con el correo especificado.';
             SET @ErrorSeverity = 16;
             RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
             RETURN;
@@ -260,16 +259,16 @@ BEGIN
             VALUES (@UserId, @CodCourse);
         END
 
-        -- Insertar una notificación para informar al usuario sobre su nuevo rol
+        -- Insertar una notificaciï¿½n para informar al usuario sobre su nuevo rol
         INSERT INTO proyecto1.Notification (UserId, Message, Date)
-        VALUES (@UserId, '¡Felicidades! Ha sido promovido al rol de Tutor para el curso con código ' + CAST(@CodCourse AS NVARCHAR(10)), GETDATE());
+        VALUES (@UserId, 'ï¿½Felicidades! Ha sido promovido al rol de Tutor para el curso con cï¿½digo ' + CAST(@CodCourse AS NVARCHAR(10)), GETDATE());
 
-        -- Confirmar la transacción
+        -- Confirmar la transacciï¿½n
         COMMIT TRANSACTION;
         PRINT 'El estudiante ha sido promovido satisfactoriamente al rol de Tutor';
     END TRY
     BEGIN CATCH
-        -- Error - cancelar la transacción en caso de error
+        -- Error - cancelar la transacciï¿½n en caso de error
         ROLLBACK;
         SELECT @ErrorMessage = ERROR_MESSAGE();
         SET @Description = 'Cambio de Rol Fallido.';
@@ -280,10 +279,9 @@ BEGIN
             PRINT 'Error al insertar en HistoryLog: ' + ERROR_MESSAGE();
         END CATCH;
         RAISERROR(@ErrorMessage, 16, 1);
-        PRINT 'La promoción al rol de Tutor no fue satisfactoria';
+        PRINT 'La promociï¿½n al rol de Tutor no fue satisfactoria';
     END CATCH;
 END;
-
 
 -- ===
 -- PR3
@@ -303,10 +301,10 @@ BEGIN
     DECLARE @TutorId UNIQUEIDENTIFIER;
     DECLARE @Description NVARCHAR(MAX);
 
-    -- Validaciones de los parámetros de entrada
+    -- Validaciones de los parï¿½metros de entrada
     IF (@Email IS NULL OR @Email = '')
     BEGIN
-        SET @ErrorMessage = 'Error, El campo correo no puede ir vacío';
+        SET @ErrorMessage = 'Error, El campo correo no puede ir vacï¿½o';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
@@ -314,14 +312,14 @@ BEGIN
 
     IF (@CodCourse IS NULL OR @CodCourse <= 0)
     BEGIN
-        SET @ErrorMessage = 'Error, El código del curso debe ser un número positivo';
+        SET @ErrorMessage = 'Error, El cï¿½digo del curso debe ser un nï¿½mero positivo';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
     END
 
     BEGIN TRY
-        -- Inicio de la transacción
+        -- Inicio de la transacciï¿½n
         BEGIN TRANSACTION;
 
         -- Obtener UserId basado en el Email proporcionado
@@ -329,18 +327,18 @@ BEGIN
 
         IF @UserId IS NULL
         BEGIN
-            SET @ErrorMessage = 'No se encontró un usuario con el correo especificado.';
+            SET @ErrorMessage = 'No se encontrï¿½ un usuario con el correo especificado.';
             SET @ErrorSeverity = 16;
             RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
             RETURN;
         END
 
-        -- Obtener el nombre y el cupo máximo de estudiantes del curso
+        -- Obtener el nombre y el cupo mï¿½ximo de estudiantes del curso
         SELECT @CourseName = Name, @MaxStudents = CreditsRequired FROM proyecto1.Course WHERE CodCourse = @CodCourse;
 
         IF @CourseName IS NULL OR @MaxStudents IS NULL
         BEGIN
-            SET @ErrorMessage = 'No se encontró un curso con el código especificado.';
+            SET @ErrorMessage = 'No se encontrï¿½ un curso con el cï¿½digo especificado.';
             SET @ErrorSeverity = 16;
             RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
             RETURN;
@@ -351,19 +349,19 @@ BEGIN
 
         IF @CurrentStudents >= @MaxStudents
         BEGIN
-            SET @ErrorMessage = 'El curso ya ha alcanzado su límite máximo de estudiantes.';
+            SET @ErrorMessage = 'El curso ya ha alcanzado su lï¿½mite mï¿½ximo de estudiantes.';
             SET @ErrorSeverity = 16;
             RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
             RETURN;
         END
 
-        -- Insertar la asignación del curso para el estudiante
+        -- Insertar la asignaciï¿½n del curso para el estudiante
         INSERT INTO proyecto1.CourseAssignment (StudentId, CourseCodCourse)
         VALUES (@UserId, @CodCourse);
 
-        -- Insertar notificación para el estudiante
+        -- Insertar notificaciï¿½n para el estudiante
         INSERT INTO proyecto1.Notification (UserId, Message, Date)
-        VALUES (@UserId, '¡Felicidades! Ha sido asignado al curso ' + @CourseName, GETDATE());
+        VALUES (@UserId, 'ï¿½Felicidades! Ha sido asignado al curso ' + @CourseName, GETDATE());
 
         -- Buscar al tutor del curso y notificarle
         SELECT @TutorId = TP.UserId
@@ -377,21 +375,21 @@ BEGIN
             VALUES (@TutorId, 'Uno de sus estudiantes ha sido asignado al curso ' + @CourseName, GETDATE());
         END
 
-        -- Confirmar la transacción
+        -- Confirmar la transacciï¿½n
         COMMIT TRANSACTION;
-        PRINT 'Asignación al curso realizada satisfactoriamente';
+        PRINT 'Asignaciï¿½n al curso realizada satisfactoriamente';
     END TRY
     BEGIN CATCH
-        -- Error - cancelar la transacción en caso de error
+        -- Error - cancelar la transacciï¿½n en caso de error
         ROLLBACK;
         SELECT @ErrorMessage = ERROR_MESSAGE();
-        SET @Description = 'Asignación de Curso Fallida.';
+        SET @Description = 'Asignaciï¿½n de Curso Fallida.';
         
         -- Registro del error en la tabla HistoryLog
         INSERT INTO proyecto1.HistoryLog ([Date], Description) VALUES (GETDATE(), @Description + ' ' + @ErrorMessage);
         
         RAISERROR(@ErrorMessage, 16, 1);
-        PRINT 'La asignación al curso no fue satisfactoria';
+        PRINT 'La asignaciï¿½n al curso no fue satisfactoria';
     END CATCH;
 END;
 
@@ -408,17 +406,17 @@ BEGIN
     DECLARE @ErrorMessage NVARCHAR(250);
     DECLARE @ErrorSeverity INT;
 
-    -- Validación del parámetro de entrada
+    -- Validaciï¿½n del parï¿½metro de entrada
     IF (@RoleName IS NULL OR @RoleName = '')
     BEGIN
-        SET @ErrorMessage = 'Error, el nombre del rol no puede estar vacío';
+        SET @ErrorMessage = 'Error, el nombre del rol no puede estar vacï¿½o';
         SET @ErrorSeverity = 16;
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
         RETURN;
     END
 
     BEGIN TRY
-        -- Inicio de la transacción
+        -- Inicio de la transacciï¿½n
         BEGIN TRANSACTION;
 
         -- Validar si el rol ya existe
@@ -435,14 +433,14 @@ BEGIN
         INSERT INTO proyecto1.Roles (Id, RoleName)
         VALUES (@RoleId, @RoleName);
 
-        -- Confirmar la transacción
+        -- Confirmar la transacciï¿½n
         COMMIT TRANSACTION;
         PRINT 'El rol ha sido creado satisfactoriamente';
     END TRY
     BEGIN CATCH
-        -- Error - cancelar la transacción en caso de error
+        -- Error - cancelar la transacciï¿½n en caso de error
         SELECT @ErrorMessage = ERROR_MESSAGE();
-        SET @Description = 'Inserción de Rol Fallida.';
+        SET @Description = 'Inserciï¿½n de Rol Fallida.';
         INSERT INTO proyecto1.HistoryLog ([Date], Description) VALUES (GETDATE(), @Description);
         SELECT @Description AS 'Error';
 		ROLLBACK TRANSACTION;
@@ -463,7 +461,7 @@ BEGIN
     DECLARE @IsValid BIT;
     DECLARE @ErrorMessage NVARCHAR(MAX);
 
-    -- Iniciar la transacción
+    -- Iniciar la transacciï¿½n
     BEGIN TRANSACTION;
 
     BEGIN TRY
@@ -472,7 +470,7 @@ BEGIN
         
         IF @IsValid = 0
         BEGIN
-            SET @Description = 'Inserción de Curso Fallida: Nombre o Créditos Incorrectos';
+            SET @Description = 'Inserciï¿½n de Curso Fallida: Nombre o Crï¿½ditos Incorrectos';
             INSERT INTO proyecto1.HistoryLog ([Date], Description)
             VALUES (GETDATE(), @Description);
             SELECT @Description AS 'Error';
@@ -482,7 +480,7 @@ BEGIN
 
         IF @CreditsRequired < 0
         BEGIN
-            SET @Description = 'Inserción de Curso Fallida: Créditos no pueden ser negativos';
+            SET @Description = 'Inserciï¿½n de Curso Fallida: Crï¿½ditos no pueden ser negativos';
             INSERT INTO proyecto1.HistoryLog ([Date], Description)
             VALUES (GETDATE(), @Description);
             SELECT @Description AS 'Error';
@@ -492,7 +490,7 @@ BEGIN
 
         IF @CodCourse < 0
         BEGIN
-            SET @Description = 'Inserción de Curso Fallida: Código de Curso no puede ser negativo';
+            SET @Description = 'Inserciï¿½n de Curso Fallida: Cï¿½digo de Curso no puede ser negativo';
             INSERT INTO proyecto1.HistoryLog ([Date], Description)
             VALUES (GETDATE(), @Description);
             SELECT @Description AS 'Error';
@@ -504,19 +502,19 @@ BEGIN
         INSERT INTO proyecto1.Course (CodCourse, Name, CreditsRequired)
         VALUES (@CodCourse, @Name, @CreditsRequired);
 
-        -- Confirmar la transacción
+        -- Confirmar la transacciï¿½n
         COMMIT TRANSACTION;
-        SELECT 'Inserción de Curso exitosa' AS Mensaje;
+        SELECT 'Inserciï¿½n de Curso exitosa' AS Mensaje;
     END TRY
     BEGIN CATCH
-        -- Manejo de error - cancelar la transacción en caso de error
+        -- Manejo de error - cancelar la transacciï¿½n en caso de error
         IF @@TRANCOUNT > 0
         BEGIN
             ROLLBACK TRANSACTION;
         END
         
         SET @ErrorMessage = ERROR_MESSAGE();
-        SET @Description = 'Inserción de Curso Fallida: ' + @ErrorMessage;
+        SET @Description = 'Inserciï¿½n de Curso Fallida: ' + @ErrorMessage;
         INSERT INTO proyecto1.HistoryLog ([Date], Description)
         VALUES (GETDATE(), @Description);
         SELECT @Description AS 'Error';
