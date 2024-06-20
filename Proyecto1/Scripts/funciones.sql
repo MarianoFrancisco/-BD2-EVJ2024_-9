@@ -1,3 +1,5 @@
+USE BD2;
+
 -- PRIMERA FUNCION
 -- Func_course_usuarios
 CREATE FUNCTION proyecto1.F1 (@CodCourse INT)
@@ -96,3 +98,6 @@ RETURN
     WHERE 
         u.Id = @UserId
 );
+
+-- Supongamos que tenemos un usuario con Id = '87654321-0FED-CBA9-8765-43210FEDCBA9'
+SELECT * FROM proyecto1.F5('51BFDE5F-A658-4A52-9955-4BE65C20B6A4');
