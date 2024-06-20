@@ -92,7 +92,10 @@ RETURN
     INNER JOIN 
         proyecto1.ProfileStudent ps ON u.Id = ps.UserId
     INNER JOIN 
-        proyecto1.Roles r ON u.Id = r.Id
+        proyecto1.UsuarioRole ur ON u.Id = ur.UserId
+    INNER JOIN 
+        proyecto1.Roles r ON ur.RoleId = r.Id
     WHERE 
-        u.Id = @UserId
+        u.Id = @UserId AND ur.IsLatestVersion = 1
 );
+
