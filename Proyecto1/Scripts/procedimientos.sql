@@ -168,7 +168,7 @@ BEGIN
         -- Error - cancelar transacci�n 
         ROLLBACK;
         SELECT @ErrorMessage = ERROR_MESSAGE();
-        SET @Description = 'Registro de Estudiante Fallido.';
+        SET @Description = 'Registro de Estudiante Fallido.' + @ErrorMessage;
         BEGIN TRY
             INSERT INTO proyecto1.HistoryLog (Date, Description)
             VALUES (GETDATE(), @Description);
@@ -271,7 +271,7 @@ BEGIN
         -- Error - cancelar la transacci�n en caso de error
         ROLLBACK;
         SELECT @ErrorMessage = ERROR_MESSAGE();
-        SET @Description = 'Cambio de Rol Fallido.';
+        SET @Description = 'Cambio de Rol Fallido.' + @ErrorMessage; 
         BEGIN TRY
             INSERT INTO proyecto1.HistoryLog ([Date], Description) VALUES (GETDATE(), @Description);
         END TRY
@@ -383,7 +383,7 @@ BEGIN
         -- Error - cancelar la transacci�n en caso de error
         ROLLBACK;
         SELECT @ErrorMessage = ERROR_MESSAGE();
-        SET @Description = 'Asignaci�n de Curso Fallida.';
+        SET @Description = 'Asignaci�n de Curso Fallida.' + @ErrorMessage;
         
         -- Registro del error en la tabla HistoryLog
         INSERT INTO proyecto1.HistoryLog ([Date], Description) VALUES (GETDATE(), @Description + ' ' + @ErrorMessage);
