@@ -439,11 +439,11 @@ BEGIN
     END TRY
     BEGIN CATCH
         -- Error - cancelar la transacci�n en caso de error
-        SELECT @ErrorMessage = ERROR_MESSAGE();
-        SET @Description = 'Inserci�n de Rol Fallida.';
+		ROLLBACK TRANSACTION;
+		SELECT @ErrorMessage = ERROR_MESSAGE();
+        SET @Description = 'Inserci�n de Rol Fallida.' + @ErrorMessage;
         INSERT INTO proyecto1.HistoryLog ([Date], Description) VALUES (GETDATE(), @Description);
         SELECT @Description AS 'Error';
-		ROLLBACK TRANSACTION;
     END CATCH;
 END;
 
@@ -470,31 +470,31 @@ BEGIN
         
         IF @IsValid = 0
         BEGIN
+			ROLLBACK TRANSACTION;
             SET @Description = 'Inserci�n de Curso Fallida: Nombre o Cr�ditos Incorrectos';
             INSERT INTO proyecto1.HistoryLog ([Date], Description)
             VALUES (GETDATE(), @Description);
             SELECT @Description AS 'Error';
-            ROLLBACK TRANSACTION;
             RETURN;
         END
 
         IF @CreditsRequired < 0
         BEGIN
+			ROLLBACK TRANSACTION;
             SET @Description = 'Inserci�n de Curso Fallida: Cr�ditos no pueden ser negativos';
             INSERT INTO proyecto1.HistoryLog ([Date], Description)
             VALUES (GETDATE(), @Description);
             SELECT @Description AS 'Error';
-            ROLLBACK TRANSACTION;
             RETURN;
         END
 
         IF @CodCourse < 0
         BEGIN
+			ROLLBACK TRANSACTION;
             SET @Description = 'Inserci�n de Curso Fallida: C�digo de Curso no puede ser negativo';
             INSERT INTO proyecto1.HistoryLog ([Date], Description)
             VALUES (GETDATE(), @Description);
             SELECT @Description AS 'Error';
-            ROLLBACK TRANSACTION;
             RETURN;
         END
 
