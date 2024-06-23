@@ -21,7 +21,7 @@ BEGIN
     ELSE
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: Course' ;
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -50,7 +50,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: Usuarios';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -79,7 +79,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: Roles';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -108,7 +108,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: CourseAssignment';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -137,7 +137,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: CourseTutor';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -166,7 +166,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: Notification';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -195,7 +195,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: ProfileStudent';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -224,7 +224,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: TFA';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -253,7 +253,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: TutorProfile';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)
@@ -282,7 +282,7 @@ BEGIN
         SET @Operacion = 'UPDATE';
     -- L?gica para manejar las operaciones en las tablas
     -- Tu l?gica aqu?...
-    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa';
+    SET @Descripcion = 'Operacion ' + @Operacion + ' Exitosa - Tabla: UsuarioRole';
 
     -- Insertar el registro en la tabla HistoryLog
     INSERT INTO proyecto1.HistoryLog ([Date], Description)

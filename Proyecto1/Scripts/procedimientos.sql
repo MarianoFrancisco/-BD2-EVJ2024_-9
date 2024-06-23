@@ -97,6 +97,14 @@ BEGIN
         RETURN;
     END
 
+	IF (@Credits IS NULL)
+    BEGIN
+        SET @ErrorMessage = 'Los creditos no estan presentes.';
+        SET @ErrorSeverity = 16;
+        RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
+        RETURN;
+    END
+
     IF (@Credits < 0)
     BEGIN
         SET @ErrorMessage = 'Error, No puede ingresar una cantidad de cr�ditos negativa';
@@ -118,7 +126,7 @@ BEGIN
             SET @ErrorSeverity = 16;
             RAISERROR(@ErrorMessage,@ErrorSeverity,1);
             RETURN;
-        END  
+        END
 
         -- Validar si el correo ya est� asociado con otra cuenta
         IF EXISTS (SELECT * FROM proyecto1.Usuarios WHERE Email = @Email)
@@ -253,6 +261,13 @@ BEGIN
         END
 
         -- Asignar al usuario como tutor al curso especificado en CourseTutor
+		IF NOT EXISTS (SELECT * FROM proyecto1.Course WHERE CodCourse = @CodCourse)
+        BEGIN
+            SET @ErrorMessage = 'No existe el curso.';
+            SET @ErrorSeverity = 16;
+            RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
+            RETURN;
+        END
         IF NOT EXISTS (SELECT 1 FROM proyecto1.CourseTutor WHERE TutorId = @UserId AND CourseCodCourse = @CodCourse)
         BEGIN
             INSERT INTO proyecto1.CourseTutor (TutorId, CourseCodCourse)
